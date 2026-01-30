@@ -1,8 +1,8 @@
 <?php
 
-namespace Gibass\UseCaseMakerBundle\Exception;
+namespace Gibass\DomainMakerBundle\Exception;
 
-class FileAlreadyExistException extends \Exception
+class FileAlreadyExistException extends \RuntimeException
 {
     public function __construct(string $path, int $code = 0, \Throwable $previous = null)
     {

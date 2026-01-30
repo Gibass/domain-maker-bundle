@@ -1,107 +1,39 @@
 <?php
 
-namespace Gibass\UseCaseMakerBundle\Structure;
+namespace Gibass\DomainMakerBundle\Structure;
 
-class StructureConfig
+readonly class StructureConfig
 {
-    public const CONFIG = [
-        'Request' => [
-            'suffix' => 'Request',
-            'tpl' => 'request',
-            'params' => [],
-        ],
-        'Response' => [
-            'suffix' => 'Response',
-            'tpl' => 'response',
-            'params' => [],
-        ],
-        'Presenter' => [
-            'suffix' => 'PresenterInterface',
-            'tpl' => 'presenter',
-            'params' => [
-                'responseClassName' => 'Response',
-            ],
-        ],
-        'UseCase' => [
-            'suffix' => '',
-            'tpl' => 'use_case',
-            'params' => [
-                'requestClassName' => 'Request',
-                'responseClassName' => 'Response',
-            ],
-        ],
-        'Test' => [
-            'suffix' => 'Test',
-            'tpl' => 'test',
-            'params' => [
-                'useCaseClassName' => 'UseCase',
-                'requestClassName' => 'Request',
-                'responseClassName' => 'Response',
-                'requestNamespace' => 'RequestNamespace',
-                'responseNamespace' => 'ResponseNamespace',
-                'useCaseNamespace' => 'UseCaseNamespace',
-            ],
-        ],
-    ];
-
     public function __construct(
-        private readonly string $domainDir,
-        private readonly string $testDir,
-        private readonly string $domainNamespacePrefix,
-        private readonly string $testNamespacePrefix
+        private string $rootNamespace,
+        private string $configDir,
+        private string $srcDir,
     ) {
     }
 
-    public function getDomainDir(): string
+    public function getRootNamespace(): string
     {
-        return $this->domainDir;
+        return $this->rootNamespace;
     }
 
-    public function getTestDir(): string
+    public function getSrcDir(): string
     {
-        return $this->testDir;
+        return $this->srcDir;
     }
 
-    public function loadKeys(): array
+    public function getConfigDir(): string
     {
-        return array_keys(self::CONFIG);
+        return $this->configDir;
     }
 
-    public function getNamespace(string $key, string $domain): string
+    public function getTemplate(string $key, ?string $default = null): string
     {
-        return $key === 'Test' ?
-            sprintf("$this->testNamespacePrefix\\%s", $domain) :
-            sprintf("$this->domainNamespacePrefix\\%s\\%s", $domain, $key);
-    }
+        $template =  __DIR__ . "/../Resources/skeleton/{$key}.tpl.php";
 
-    public function get(string $key, string $type): string
-    {
-        return self::CONFIG[$key][$type] ?? '';
-    }
-
-    public function getParams(string $key, bool $hasPresenter): array
-    {
-        $params = self::CONFIG[$key]['params'] ?? [];
-
-        if ($hasPresenter && ($key === 'UseCase' || $key === 'Test')) {
-            $params['presenterInterfaceName'] = 'Presenter';
+        if (!file_exists($template) && $default) {
+            return __DIR__ . "/../Resources/skeleton/{$default}.tpl.php";
         }
 
-        if ($hasPresenter && $key === 'Test') {
-            $params['presenterNamespace'] = 'PresenterNamespace';
-        }
-
-        return $params;
-    }
-
-    public function getTemplate(string $key, bool $hasPresenter): string
-    {
-        $tpl = self::CONFIG[$key]['tpl'] ?? '';
-
-        if ($hasPresenter && ($key === 'UseCase' || $key === 'Test')) {
-            $tpl .= '_presenter';
-        }
-
-        return __DIR__ . "/../Resources/skeleton/{$tpl}.tpl.php";
+        return $template;
     }
 }

@@ -1,0 +1,30 @@
+services:
+    _defaults:
+        autowire: true      # injection par type-hint
+        autoconfigure: true # tags automatiques (Controller, Command, etc.)
+        public: false
+
+    Gibass\DomainMakerBundle\:
+        resource: '../../*'
+        exclude:
+            - '../../Resources/'
+            - '../../DependencyInjection/'
+            - '../../Exception/'
+
+    Gibass\DomainMakerBundle\Maker\:
+        resource: '../../Maker/*'
+        tags: [ 'maker.command', 'gibass.maker' ]
+
+    Gibass\DomainMakerBundle\Structure\StructureConfig:
+        arguments:
+            $rootNamespace: '%domain_maker.root_namespace%'
+            $configDir: '%domain_maker.dir.config%'
+            $srcDir: '%domain_maker.dir.src%'
+
+    Gibass\DomainMakerBundle\Generator\MakerGenerator:
+        arguments:
+            $generator: '@maker.generator'
+
+    Gibass\DomainMakerBundle\Generator\ConfigGenerator:
+        arguments:
+            $generator: '@maker.generator'

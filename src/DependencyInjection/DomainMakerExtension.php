@@ -1,19 +1,18 @@
 <?php
 
-namespace Gibass\UseCaseMakerBundle\DependencyInjection;
+namespace Gibass\DomainMakerBundle\DependencyInjection;
 
-use Gibass\UseCaseMakerBundle\Maker\MakerUseCase;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-class UseCaseMakerExtension extends Extension
+class DomainMakerExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $loader->load('services.xml');
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader->load('services.yaml');
 
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
@@ -22,11 +21,6 @@ class UseCaseMakerExtension extends Extension
             foreach ($config['parameters'] as $key => $value) {
                 $this->setParams($container, $key, $value);
             }
-
-            $rootNamespace = trim($config['parameters']['root_namespace'], '\\');
-
-            $makerCommandDefinition = $container->getDefinition('maker.maker.maker_use_case');
-            $makerCommandDefinition->replaceArgument(0, $rootNamespace);
         }
     }
 
@@ -37,7 +31,7 @@ class UseCaseMakerExtension extends Extension
                 $this->setParams($container, $key . '.' . $ikey, $iValue);
             }
         } else {
-            $container->setParameter('use_case_maker.' . $key, $value);
+            $container->setParameter('domain_maker.' . $key, $value);
         }
     }
 }

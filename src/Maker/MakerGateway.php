@@ -3,40 +3,30 @@
 namespace Gibass\DomainMakerBundle\Maker;
 
 use Gibass\DomainMakerBundle\Contracts\MakerChoosableInterface;
+use Gibass\DomainMakerBundle\Generator\ClassDetails;
 use Gibass\DomainMakerBundle\Trait\MarkerChoosableTrait;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\InputConfiguration;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 
-class MakerUseCase extends AbstractMaker implements MakerChoosableInterface
+class MakerGateway extends AbstractMaker implements MakerChoosableInterface
 {
     use MarkerChoosableTrait;
 
     public static function getCommandName(): string
     {
-        return 'maker:use-case';
+        return 'maker:gateway';
     }
 
     public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $command
-            ->setDescription('Create a new use case.')
-            ->addArgument('name', InputArgument::OPTIONAL, 'Choose a name for your new useCase')
+            ->setDescription('Create a new gateway.')
+            ->addArgument('name', InputArgument::OPTIONAL, 'Choose a name for your gateway')
         ;
-    }
-
-    public function getSubNameSpace(): string
-    {
-        return 'Domain\\UseCase';
-    }
-
-    public function getTemplate(): string
-    {
-        return $this->config->getTemplate('use_case');
     }
 
     public function loadArguments(InputInterface $input): void
@@ -44,10 +34,14 @@ class MakerUseCase extends AbstractMaker implements MakerChoosableInterface
         $this->name = $input->getArgument('name');
     }
 
-    public function chooseInput(ConsoleStyle $io): void
+    public function getSubNameSpace(): string
     {
-        $question = new ChoiceQuestion('Choose an existing useCase:', $this->loadExistingItems($this->getDomainPath() . '/Domain/UseCase'));
-        $this->name = $io->askQuestion($question);
+        return 'Domain\\Gateway';
+    }
+
+    public function getTemplate(): string
+    {
+        return $this->config->getTemplate('gateway/gateway');
     }
 
     public function createInput(ConsoleStyle $io): void
@@ -55,9 +49,19 @@ class MakerUseCase extends AbstractMaker implements MakerChoosableInterface
         parent::createInput($io);
 
         if (!$this->name) {
-            $question = new Question('Create a name for your new useCase:');
+            $question = new Question('Create a name for your new gateway:');
             $this->name = $io->askQuestion($question);
         }
+    }
+
+    public function chooseInput(ConsoleStyle $io): void
+    {
+
+    }
+
+    public function getDetails(): ClassDetails
+    {
+        return parent::getDetails()->setSuffix('GatewayInterface');
     }
 
     public function getParams(): array

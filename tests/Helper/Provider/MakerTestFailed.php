@@ -1,18 +1,18 @@
 <?php
 
-namespace Gibass\UseCaseMakerBundle\Test;
+namespace Gibass\DomainMakerBundle\Test\Helper\Provider;
 
 class MakerTestFailed extends MakerTestGenerate
 {
     private string $exception;
-    private string $message;
+    private readonly string $message;
 
     public function getException(): string
     {
         return $this->exception;
     }
 
-    public function setException(string $exception, string $message = ''): MakerTestFailed
+    public function setException(string $exception, string $message = ''): self
     {
         $this->exception = $exception;
 
