@@ -38,24 +38,27 @@ class MakerControllerTest extends MakerTestCase
     public static function dataTestGenerateProvider(): \Generator
     {
         yield 'CreateDomainAndController' => [
-            new MakerTestGenerate()
-                ->createDomain('CreateDomain')
-                ->setArgs(['name' => 'CreateUser'])
+            MakerTestGenerate::create()
+                ->createDomain('createDomain')
+                ->setArgs(['name' => 'createUser'])
+                ->addInputs([0, 0]) // Don't Create UseCase & Presenter
                 ->setFiles(['CreateDomain/UserInterface/Controller/CreateUserController.php'])
         ];
 
         yield 'ChooseDomainAndCreateControllerWithSuffix' => [
-            new MakerTestGenerate()
+            MakerTestGenerate::create()
                 ->chooseDomain(0) // CreateDomain
                 ->setArgs(['name' => 'DeleteUserController'])
+                ->addInputs([0, 0]) // Don't Create UseCase & Presenter
                 ->setFiles(['CreateDomain/UserInterface/Controller/DeleteUserController.php'])
         ];
 
         yield 'CreateDomainAndControllerWithCreatingUseCase' => [
-            new MakerTestGenerate()
+            MakerTestGenerate::create()
                 ->createDomain('Security')
                 ->setArgs(['name' => 'Auth'])
                 ->addInputs([1, 'Login']) // Create UseCase - UseCase Name
+                ->addInput(0) // Don't Create a Presenter
                 ->setFiles([
                     'Security/Domain/UseCase/Login.php',
                     'Security/UserInterface/Controller/AuthController.php'
@@ -63,7 +66,7 @@ class MakerControllerTest extends MakerTestCase
         ];
 
         yield 'ChooseDomainAndCreateControllerWithCreatingPresenter' => [
-            new MakerTestGenerate()
+            MakerTestGenerate::create()
                 ->chooseDomain(1) // Security
                 ->setArgs(['name' => 'Password'])
                 ->addInput(0) // Don't Create UseCase
@@ -75,7 +78,7 @@ class MakerControllerTest extends MakerTestCase
         ];
 
         yield 'CreateDomainAndControllerWithCreatingUseCaseAndPresenter' => [
-            new MakerTestGenerate()
+            MakerTestGenerate::create()
                 ->createDomain('Account')
                 ->setArgs(['name' => 'CreateAccount'])
                 ->addInputs([1, 'CreateAccount']) // Create UseCase - UseCase Name
@@ -88,7 +91,7 @@ class MakerControllerTest extends MakerTestCase
         ];
 
         yield 'ChooseDomainAndCreateControllerWithExistingUseCaseAndCreatePresenter' => [
-            new MakerTestGenerate()
+            MakerTestGenerate::create()
                 ->chooseDomain(0) // Account
                 ->setArgs(['name' => 'CreateAdmin'])
                 ->addInputs([2, 0]) // Choose UseCase - choose 'CreateAccount'
@@ -101,7 +104,7 @@ class MakerControllerTest extends MakerTestCase
         ];
 
         yield 'ChooseDomainAndCreateControllerWithCreatingUseCaseAndExistingPresenter' => [
-            new MakerTestGenerate()
+            MakerTestGenerate::create()
                 ->chooseDomain(0) // Account
                 ->setArgs(['name' => 'CreateUser'])
                 ->addInputs([1, 'CreateUser']) // Create UseCase - UseCase Name
@@ -114,7 +117,7 @@ class MakerControllerTest extends MakerTestCase
         ];
 
         yield 'ChooseDomainAndCreateControllerWithExistingUseCaseAndExistingPresenter' => [
-            new MakerTestGenerate()
+            MakerTestGenerate::create()
                 ->chooseDomain(0) // Account
                 ->setArgs(['name' => 'CreateRole'])
                 ->addInputs([2, 0]) // Choose UseCase - choose 'CreateAccount'
@@ -127,7 +130,6 @@ class MakerControllerTest extends MakerTestCase
         ];
     }
 
-
     #[DataProvider('dataTestContentProvider')]
     public function testContentSuccessful(MakerTestContent $content): void
     {
@@ -137,7 +139,7 @@ class MakerControllerTest extends MakerTestCase
     public static function dataTestContentProvider(): \Generator
     {
         yield 'CheckCreateDomainAndController' => [
-            new MakerTestContent('CreateDomain')
+            MakerTestContent::create('CreateDomain')
                 ->addContent('Controller', 'CreateUserController.php', 'namespace App\\CreateDomain\\UserInterface\\Controller')
                 ->addContent('Controller', 'CreateUserController.php', 'use Symfony\\Component\\HttpFoundation\Response;')
                 ->addContent('Controller', 'CreateUserController.php', 'class CreateUserController extends AbstractController')
@@ -147,7 +149,7 @@ class MakerControllerTest extends MakerTestCase
         ];
 
         yield 'CheckCreateDomainAndControllerWithCreatingUseCase' => [
-            new MakerTestContent('Security')
+            MakerTestContent::create('Security')
                 ->addContent('Controller', 'AuthController.php', 'namespace App\\Security\\UserInterface\\Controller')
                 ->addContent('Controller', 'AuthController.php', 'use Symfony\\Component\\HttpFoundation\Response;')
                 ->addContent('Controller', 'AuthController.php', 'use App\\Security\\Domain\\UseCase\\Login;')
@@ -158,7 +160,7 @@ class MakerControllerTest extends MakerTestCase
         ];
 
         yield 'CheckChooseDomainAndCreateControllerWithCreatingPresenter' => [
-            new MakerTestContent('Security')
+            MakerTestContent::create('Security')
                 ->addContent('Controller', 'PasswordController.php', 'namespace App\\Security\\UserInterface\\Controller')
                 ->addContent('Controller', 'PasswordController.php', 'use Symfony\\Component\\HttpFoundation\Response;')
                 ->addContent('Controller', 'PasswordController.php', 'use App\\Security\\UserInterface\\Presenter\\Html\\UpdatePasswordPresenterHTML;')
@@ -169,7 +171,7 @@ class MakerControllerTest extends MakerTestCase
         ];
 
         yield 'CheckChooseDomainAndCreateControllerWithExistingUseCaseAndExistingPresenter' => [
-            new MakerTestContent('Account')
+            MakerTestContent::create('Account')
                 ->addContent('Controller', 'CreateRoleController.php', 'namespace App\\Account\\UserInterface\\Controller')
                 ->addContent('Controller', 'CreateRoleController.php', 'use Symfony\\Component\\HttpFoundation\JsonResponse;')
                 ->addContent('Controller', 'CreateRoleController.php', 'use App\\Account\\Domain\\UseCase\\CreateAccount;')
@@ -182,26 +184,27 @@ class MakerControllerTest extends MakerTestCase
         ];
 
         yield 'CheckConfigCreateDomain' => [
-            new MakerTestContent('CreateDomain')
+            MakerTestContent::create('CreateDomain')
                 ->addContent('Config', 'routes.yaml', 'createdomain.controller')
                 ->addContent('Config', 'routes.yaml', 'resource: { path: ../src/CreateDomain/UserInterface/Controller/, namespace: App\CreateDomain\UserInterface\Controller }')
                 ->addContent('Config', 'routes.yaml', 'type: attribute')
         ];
 
         yield 'CheckConfigSecurity' => [
-            new MakerTestContent('Security')
+            MakerTestContent::create('Security')
                 ->addContent('Config', 'routes.yaml', 'security.controller')
                 ->addContent('Config', 'routes.yaml', 'resource: { path: ../src/Security/UserInterface/Controller/, namespace: App\Security\UserInterface\Controller }')
                 ->addContent('Config', 'routes.yaml', 'type: attribute')
         ];
 
         yield 'CheckConfigAccount' => [
-            new MakerTestContent('Account')
+            MakerTestContent::create('Account')
                 ->addContent('Config', 'routes.yaml', 'account.controller')
                 ->addContent('Config', 'routes.yaml', 'resource: { path: ../src/Account/UserInterface/Controller/, namespace: App\Account\UserInterface\Controller }')
                 ->addContent('Config', 'routes.yaml', 'type: attribute')
         ];
     }
+
 
     #[DataProvider('dataTestFailedProvider')]
     public function testFailedGenerate(MakerTestFailed $failed): void
@@ -217,22 +220,24 @@ class MakerControllerTest extends MakerTestCase
     public static function dataTestFailedProvider(): \Generator
     {
         yield 'CreateControllerWithExistingFileThrowingException' => [
-            new MakerTestFailed()
+            MakerTestFailed::create()
                 ->chooseDomain(0) // Account
                 ->setArgs(['name' => 'CreateAccount'])
+                ->addInputs([0, 0]) // Don't Create UseCase & Presenter
                 ->setException(FileAlreadyExistException::class, 'Account/UserInterface/Controller/CreateAccountController.php" is already exist.'),
         ];
 
         yield 'CreateControllerAndUseCaseWithExistingUseCaseFileThrowingException' => [
-            new MakerTestFailed()
+            MakerTestFailed::create()
                 ->chooseDomain(0) // Account
                 ->setArgs(['name' => 'CreateFailed'])
                 ->addInputs([1, 'CreateUser'])
+                ->addInput(0) // Don't Create Presenter
                 ->setException(FileAlreadyExistException::class, 'Account/Domain/UseCase/CreateUser.php" is already exist.'),
         ];
 
         yield 'CreateControllerAndPresenterWithExistingPresenterFileThrowingException' => [
-            new MakerTestFailed()
+            MakerTestFailed::create()
                 ->chooseDomain(2) // Security
                 ->setArgs(['name' => 'CreateSecurity'])
                 ->addInput(0) // Don't Create UseCase
@@ -241,16 +246,16 @@ class MakerControllerTest extends MakerTestCase
         ];
 
         yield 'CreateControllerAndChooseUseCaseInEmptyFolder' => [
-            new MakerTestFailed()
+            MakerTestFailed::create()
                 ->createDomain('EmptyDomain')
                 ->setArgs(['name' => 'Empty'])
                 ->addInput(2) // Choose UseCase
                 ->setException(NoItemToChooseException::class, 'EmptyDomain/Domain/UseCase')
         ];
 
-        yield 'ChooseControllerAndChoosePresenterInEmptyFolder' => [
-            new MakerTestFailed()
-                ->chooseDomain(2) // EmptyDomain
+        yield 'CreateControllerAndChoosePresenterInEmptyFolder' => [
+            MakerTestFailed::create()
+                ->createDomain('EmptyDomain')
                 ->setArgs(['name' => 'NoPresenter'])
                 ->addInput(0) // Don't Create UseCase
                 ->addInputs([2, 1]) // Choose Presenter - JSON

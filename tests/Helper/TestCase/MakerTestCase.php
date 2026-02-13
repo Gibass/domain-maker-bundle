@@ -43,10 +43,17 @@ class MakerTestCase extends KernelTestCase
         }
     }
 
+    protected function createFiles(array $files): void
+    {
+        foreach ($files as $file) {
+            (new Filesystem())->dumpFile($file, '');
+        }
+    }
+
     private static function removeTmpDir(): void
     {
         if (file_exists(MakerTestKernel::TMP_DIR)) {
-            new Filesystem()->remove(MakerTestKernel::TMP_DIR);
+            (new Filesystem())->remove(MakerTestKernel::TMP_DIR);
         }
     }
 
@@ -58,6 +65,7 @@ class MakerTestCase extends KernelTestCase
             'Controller' => 'src/' . $domain . '/UserInterface/Controller/',
             'Gateway' => 'src/' . $domain . '/Domain/Gateway/',
             'Repository' => 'src/' . $domain . '/Infrastructure/Adapter/Repository/',
+            'Entity' => 'src/' . $domain . '/Domain/Model/Entity/',
             'Config' => 'config/',
             default => $type
         };

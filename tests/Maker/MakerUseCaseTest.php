@@ -36,28 +36,28 @@ class MakerUseCaseTest extends MakerTestCase
     public static function dataTestGenerateProvider(): \Generator
     {
         yield 'CreateDomainAndUseCase' => [
-            new MakerTestGenerate()
+            MakerTestGenerate::create()
                 ->createDomain('CreateDomain')
                 ->setArgs(['name' => 'TestUseCase'])
                 ->setFiles(['CreateDomain/Domain/UseCase/TestUseCase.php'])
         ];
 
         yield 'ChooseExistingDomainAndCreateUseCase' => [
-            new MakerTestGenerate()
+            MakerTestGenerate::create()
                 ->chooseDomain(0)
                 ->setArgs(['name' => 'NewUseCase'])
                 ->setFiles(['CreateDomain/Domain/UseCase/NewUseCase.php'])
         ];
 
         yield 'CreateDomainAndUseCaseWithSnakeCaseInput' => [
-            new MakerTestGenerate()
+            MakerTestGenerate::create()
                 ->createDomain('snake_case_domain')
                 ->setArgs(['name' => 'snake_use_case'])
                 ->setFiles(['SnakeCaseDomain/Domain/UseCase/SnakeUseCase.php'])
         ];
 
         yield 'ChooseExistingDomainAndCreateUseCaseWithSpace' => [
-            new MakerTestGenerate()
+            MakerTestGenerate::create()
                 ->chooseDomain(1)
                 ->setArgs(['name' => 'Space use case'])
                 ->setFiles(['SnakeCaseDomain/Domain/UseCase/SpaceUseCase.php'])
@@ -73,14 +73,14 @@ class MakerUseCaseTest extends MakerTestCase
     public static function dataTestContentProvider(): \Generator
     {
         yield 'CheckCreatedUseCaseContentWithCreatedDomain' => [
-            new MakerTestContent('CreateDomain')
+            MakerTestContent::create('CreateDomain')
                 ->addContent('UseCase', 'TestUseCase.php', 'namespace App\\CreateDomain\\Domain\\UseCase')
                 ->addContent('UseCase', 'TestUseCase.php', 'class TestUseCase')
                 ->addContent('UseCase', 'TestUseCase.php', 'public function execute(): void')
         ];
 
         yield 'CheckCreatedUseCaseContentWithChosenDomain' => [
-            new MakerTestContent('SnakeCaseDomain')
+            MakerTestContent::create('SnakeCaseDomain')
                 ->addContent('UseCase', 'SpaceUseCase.php', 'namespace App\\SnakeCaseDomain\\Domain\\UseCase')
                 ->addContent('UseCase', 'SpaceUseCase.php', 'class SpaceUseCase')
                 ->addContent('UseCase', 'SpaceUseCase.php', 'public function execute(): void')
@@ -101,7 +101,7 @@ class MakerUseCaseTest extends MakerTestCase
     public static function dataTestFailedProvider(): \Generator
     {
         yield 'CreateUseCaseWithExistingFileThrowingException' => [
-            new MakerTestFailed()
+            MakerTestFailed::create()
                 ->chooseDomain(0)
                 ->setArgs(['name' => 'NewUseCase'])
                 ->setException(FileAlreadyExistException::class, 'CreateDomain/Domain/UseCase/NewUseCase.php" is already exist.'),

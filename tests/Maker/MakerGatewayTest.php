@@ -36,14 +36,14 @@ class MakerGatewayTest extends MakerTestCase
     public static function dataTestGenerateProvider(): \Generator
     {
         yield 'CreateDomainAndGateway' => [
-            new MakerTestGenerate()
+            MakerTestGenerate::create()
                 ->createDomain('Account')
                 ->setArgs(['name' => 'User'])
                 ->setFiles(['Account/Domain/Gateway/UserGatewayInterface.php'])
         ];
 
         yield 'ChooseExistingDomainAndCreateGatewayWithSuffix' => [
-            new MakerTestGenerate()
+            MakerTestGenerate::create()
                 ->chooseDomain(0) // Account
                 ->setArgs(['name' => 'AdminGatewayInterface'])
                 ->setFiles(['Account/Domain/Gateway/AdminGatewayInterface.php'])
@@ -59,13 +59,13 @@ class MakerGatewayTest extends MakerTestCase
     public static function dataTestContentProvider(): \Generator
     {
         yield 'CheckCreateDomainAndGateway' => [
-            new MakerTestContent('Account')
+            MakerTestContent::create('Account')
                 ->addContent('Gateway', 'UserGatewayInterface.php', 'namespace App\\Account\\Domain\\Gateway')
                 ->addContent('Gateway', 'UserGatewayInterface.php', 'interface UserGatewayInterface')
         ];
 
         yield 'CheckChooseExistingDomainAndCreateGateway' => [
-            new MakerTestContent('Account')
+            MakerTestContent::create('Account')
                 ->addContent('Gateway', 'AdminGatewayInterface.php', 'namespace App\\Account\\Domain\\Gateway')
                 ->addContent('Gateway', 'AdminGatewayInterface.php', 'interface AdminGatewayInterface')
         ];
@@ -85,7 +85,7 @@ class MakerGatewayTest extends MakerTestCase
     public static function dataTestFailedProvider(): \Generator
     {
         yield 'CreateGatewayWithExistingFileThrowingException' => [
-            new MakerTestFailed()
+            MakerTestFailed::create()
                 ->chooseDomain(0) // Account
                 ->setArgs(['name' => 'User'])
                 ->setException(FileAlreadyExistException::class, 'Account/Domain/Gateway/UserGatewayInterface.php" is already exist.'),

@@ -24,7 +24,3 @@ services:
     Gibass\DomainMakerBundle\Generator\MakerGenerator:
         arguments:
             $generator: '@maker.generator'
-
-    Gibass\DomainMakerBundle\Generator\ConfigGenerator:
-        arguments:
-            $generator: '@maker.generator'

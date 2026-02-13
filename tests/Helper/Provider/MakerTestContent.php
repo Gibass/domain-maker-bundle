@@ -10,6 +10,11 @@ class MakerTestContent
     {
     }
 
+    public static function create(string $domainName): static
+    {
+        return new self($domainName);
+    }
+
     public function getDomain(): string
     {
         return $this->domainName;

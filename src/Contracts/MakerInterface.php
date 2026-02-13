@@ -3,30 +3,27 @@
 namespace Gibass\DomainMakerBundle\Contracts;
 
 use Gibass\DomainMakerBundle\Generator\ClassDetails;
-use Symfony\Bundle\MakerBundle\Generator;
+use Symfony\Bundle\MakerBundle\ConsoleStyle;
 
 interface MakerInterface
 {
-    public function getId(): ?string;
+    public function getDomain(): string;
 
     public function setDomain(string $domain): self;
 
-    public function getSubNameSpace(): string;
+    public function setName(string $name): self;
 
-    public function getShortName(): ?string;
+    public function interactOptions(ConsoleStyle $io): void;
 
-    public function getTargetPath(): ?string;
+    public function createClassDetails(): ClassDetails;
 
-    public function getTemplate(): ?string;
+    public function getClassDetails(): ClassDetails;
 
-    /** @return MakerInterface[] */
-    public function getDependencies(): array;
+    public function setClassDetails(ClassDetails $classDetails): self;
 
-    public function needToCreate(): bool;
+    public function getBuilderClass(): array;
 
-    public function getDetails(): ClassDetails;
-
-    public function initialize(): void;
+    public function getTemplate(): string;
 
     public function getParams(): array;
 }

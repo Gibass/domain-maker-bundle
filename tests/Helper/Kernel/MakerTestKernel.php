@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class MakerTestKernel extends Kernel
 {
-    public const string TMP_DIR = __DIR__ . '/../../tmp';
+    public const TMP_DIR = __DIR__ . '/../../tmp';
 
     public function registerBundles(): iterable
     {

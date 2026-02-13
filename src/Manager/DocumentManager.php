@@ -6,6 +6,10 @@ use Symfony\Component\Finder\Finder;
 
 class DocumentManager
 {
+    public function __construct()
+    {
+    }
+
     public function listDirectories(string $sourcePath): array
     {
         if (!$this->isDirectoryExist($sourcePath)) {

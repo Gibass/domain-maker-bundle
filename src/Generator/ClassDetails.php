@@ -3,58 +3,63 @@
 namespace Gibass\DomainMakerBundle\Generator;
 
 use Symfony\Bundle\MakerBundle\Str;
+use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
 
-class ClassDetails
+readonly class ClassDetails
 {
-    private string $name;
-
-    private string $suffix;
-
-    private string $subPath;
-
-    private bool $initialized = false;
-
-    public function getName(): string
+    public function __construct(
+        private string $className,
+        private string $suffix,
+        private string $namespace,
+        private string $filePath,
+        private UseStatementGenerator $useStatementGenerator,
+    )
     {
-        return $this->name;
     }
 
-    public function setName(string $name): self
+    public static function create(string $name, ?string $namespace, string $targetPath,  ?string $suffix = null, ?string $extendsClass = null, array $useStatements = []): self
     {
-        $this->name = Str::asCamelCase($name);
-        return $this;
+        $className = Str::asClassName($name, $suffix ?? '');
+
+        $useStatements = new UseStatementGenerator($useStatements);
+
+        if ($extendsClass) {
+            $useStatements->addUseStatement($extendsClass);
+        }
+
+        $filePath = sprintf('%s/%s.php', $targetPath, $className);
+
+        return new self(
+            className: $className,
+            suffix: $suffix ?? '',
+            namespace: $namespace,
+            filePath: $filePath,
+            useStatementGenerator: $useStatements
+        );
     }
 
-    public function getSuffix(): string
+    public function getClassName(bool $withSuffix = true): string
     {
-        return $this->suffix ?? '';
+        return $withSuffix ? $this->className : Str::removeSuffix($this->className, $this->suffix);
     }
 
-    public function setSuffix(string $suffix): self
+    public function getFullClassName(): string
     {
-        $this->suffix = $suffix;
-        return $this;
+        return $this->namespace . '\\' . $this->className;
     }
 
-    public function getSubPath(): string
+    public function getNamespace(): string
     {
-        return $this->subPath;
+        return $this->namespace;
     }
 
-    public function setSubPath(string $subPath): self
+    public function getUseStatementGenerator(): UseStatementGenerator
     {
-        $this->subPath = $subPath;
-        return $this;
+        return $this->useStatementGenerator;
     }
 
-    public function isInitialized(): bool
+    public function getFilePath(): string
     {
-        return $this->initialized;
-    }
-
-    public function setInitialized(bool $initialized): self
-    {
-        $this->initialized = $initialized;
-        return $this;
+        return $this->filePath;
     }
 }

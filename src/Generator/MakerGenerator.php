@@ -5,7 +5,6 @@ namespace Gibass\DomainMakerBundle\Generator;
 use Gibass\DomainMakerBundle\Contracts\MakerInterface;
 use Gibass\DomainMakerBundle\Exception\FileAlreadyExistException;
 use Symfony\Bundle\MakerBundle\Generator;
-use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 
 class MakerGenerator
 {
@@ -17,26 +16,26 @@ class MakerGenerator
 
     public function generate(MakerInterface $maker): void
     {
-        if (!$maker->needToCreate() || $this->isInPending($maker)) {
+        if ($this->isInPending($maker)) {
             return;
         }
 
-        if (file_exists($maker->getTargetPath())) {
-            throw new FileAlreadyExistException($maker->getTargetPath());
+        if (file_exists($maker->getClassDetails()->getFilePath())) {
+            throw new FileAlreadyExistException($maker->getClassDetails()->getFilePath());
         }
 
         $this->generator->generateFile(
-            $maker->getTargetPath(),
+            $maker->getClassDetails()->getFilePath(),
             $maker->getTemplate(),
             $maker->getParams(),
         );
 
-        $this->operations[$maker->getId()] = 'generate';
+        $this->operations[$maker->getClassDetails()->getFullClassName()] = 'generate';
     }
 
     public function isInPending(MakerInterface $maker): bool
     {
-        return isset($this->operations[$maker->getId()]);
+        return isset($this->operations[$maker->getClassDetails()->getFullClassName()]);
     }
 
     public function write(): void
@@ -50,12 +49,8 @@ class MakerGenerator
         $this->operations = [];
     }
 
-    public function createClassDetails(MakerInterface $maker): ClassNameDetails
+    public function dumpFile(string $targetPath, string $contents): void
     {
-        return $this->generator->createClassNameDetails(
-            $maker->getDetails()->getName(),
-            $maker->getSubNameSpace(),
-            $maker->getDetails()->getSuffix()
-        );
+        $this->generator->dumpFile($targetPath, $contents);
     }
 }

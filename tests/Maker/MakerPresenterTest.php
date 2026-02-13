@@ -36,7 +36,7 @@ class MakerPresenterTest extends MakerTestCase
     public static function dataTestGenerateProvider(): \Generator
     {
         yield 'CreateDomainAndHtmlPresenter' => [
-            new MakerTestGenerate()
+            MakerTestGenerate::create()
                 ->createDomain('CreateDomain')
                 ->setArgs(['name' => 'TestUseCase'])
                 ->addInput(0) // Html
@@ -44,7 +44,7 @@ class MakerPresenterTest extends MakerTestCase
         ];
 
         yield 'ChooseExistingDomainAndCreateJsonPresenter' => [
-            new MakerTestGenerate()
+            MakerTestGenerate::create()
                 ->chooseDomain(0)
                 ->setArgs(['name' => 'NewUseCase'])
                 ->addInput(1) // Json
@@ -52,7 +52,7 @@ class MakerPresenterTest extends MakerTestCase
         ];
 
         yield 'CreateDomainAndHtmlPresenterWithSuffix' => [
-            new MakerTestGenerate()
+            MakerTestGenerate::create()
                 ->createDomain('NewDomain')
                 ->setArgs(['name' => 'TestWithSuffixPresenterHTML'])
                 ->addInput(0) // Html
@@ -69,7 +69,7 @@ class MakerPresenterTest extends MakerTestCase
     public static function dataTestContentProvider(): \Generator
     {
         yield 'CheckCreatedHtmlPresenterContentWithCreatedDomain' => [
-            new MakerTestContent('CreateDomain')
+            MakerTestContent::create('CreateDomain')
                 ->addContent('Presenter', 'Html/TestUseCasePresenterHTML.php', 'namespace App\\CreateDomain\\UserInterface\\Presenter\\Html')
                 ->addContent('Presenter', 'Html/TestUseCasePresenterHTML.php', 'use App\\Core\\UserInterface\\Presenter\\AbstractWebPresenter;')
                 ->addContent('Presenter', 'Html/TestUseCasePresenterHTML.php', 'use Symfony\\Component\\HttpFoundation\\Response;')
@@ -79,7 +79,7 @@ class MakerPresenterTest extends MakerTestCase
         ];
 
         yield 'CheckCreatedJsonPresenterContentWithChosenDomain' => [
-            new MakerTestContent('CreateDomain')
+            MakerTestContent::create('CreateDomain')
                 ->addContent('Presenter', 'Json/NewUseCasePresenterJSON.php', 'namespace App\\CreateDomain\\UserInterface\\Presenter\\Json')
                 ->addContent('Presenter', 'Json/NewUseCasePresenterJSON.php', 'use App\\Core\\UserInterface\\Presenter\\AbstractJsonPresenter;')
                 ->addContent('Presenter', 'Json/NewUseCasePresenterJSON.php', 'use Symfony\\Component\\HttpFoundation\\JsonResponse;')
@@ -103,7 +103,7 @@ class MakerPresenterTest extends MakerTestCase
     public static function dataTestFailedProvider(): \Generator
     {
         yield 'CreatePresenterWithExistingFileThrowingException' => [
-            new MakerTestFailed()
+            MakerTestFailed::create()
                 ->chooseDomain(0)
                 ->setArgs(['name' => 'NewUseCase'])
                 ->addInput(1) // Json

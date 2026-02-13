@@ -7,10 +7,15 @@ class MakerTestGenerate
     private array $inputs = [];
     private array $args = [];
     private array $files = [];
+    private array $filesToCreate = [];
 
     /** @var MakerTestGenerate[]  */
     private array $makers = [];
-    private string $command;
+
+    public static function create(): static
+    {
+        return new static();
+    }
 
     public function createDomain(string $domainName): self
     {
@@ -21,17 +26,6 @@ class MakerTestGenerate
     public function chooseDomain(int $domainIndex): self
     {
         $this->inputs = ['no', $domainIndex];
-        return $this;
-    }
-
-    public function getCommand(): string
-    {
-        return $this->command;
-    }
-
-    public function setCommand(string $name): self
-    {
-        $this->command = $name;
         return $this;
     }
 
@@ -79,10 +73,15 @@ class MakerTestGenerate
         return $this->makers;
     }
 
-    public function addMaker(MakerTestGenerate $maker): self
+    public function createFile(array $filesToCreate): self
     {
-        $this->makers[] = $maker;
+        $this->filesToCreate[] = $filesToCreate;
 
         return $this;
+    }
+
+    public function getFilesToCreate(): array
+    {
+        return $this->filesToCreate;
     }
 }

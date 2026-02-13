@@ -14,14 +14,12 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class MakerRepositoryTest extends MakerTestCase
 {
-    private Application $application;
-
     protected function setUp(): void
     {
         $kernel = self::bootKernel();
         $this->container = $kernel->getContainer();
-        $this->application = new Application($kernel);
-        $this->commandTester = new CommandTester($this->application->find('maker:repository'));
+        $application = new Application($kernel);
+        $this->commandTester = new CommandTester($application->find('maker:repository'));
     }
 
     #[DataProvider('dataTestGenerateProvider')]
@@ -29,10 +27,8 @@ class MakerRepositoryTest extends MakerTestCase
     {
         $this->commandTester->setInputs($generate->getInputs());
 
-        foreach ($generate->getMakers() as $maker) {
-            $commandTest = new CommandTester($this->application->find($maker->getCommand()));
-            $commandTest->setInputs($maker->getInputs());
-            $commandTest->execute($maker->getArgs());
+        foreach ($generate->getFilesToCreate() as $files) {
+            $this->createFiles($files);
         }
 
         $this->commandTester->execute($generate->getArgs());
@@ -44,7 +40,7 @@ class MakerRepositoryTest extends MakerTestCase
     public static function dataTestGenerateProvider(): \Generator
     {
         yield 'CreateDomainRepositoryAndEntity' => [
-            new MakerTestGenerate()
+            MakerTestGenerate::create()
                 ->createDomain('CreateDomain')
                 ->setArgs(['name' => 'User'])
                 ->addInputs([0, 'User']) // Create Entity - Entity Name
@@ -56,14 +52,12 @@ class MakerRepositoryTest extends MakerTestCase
         ];
 
         yield 'ChooseDomainAndCreateRepositoryWithExistingGateway' => [
-            new MakerTestGenerate()
+            MakerTestGenerate::create()
                 ->chooseDomain(0) // CreateDomain
                 ->setArgs(['name' => 'PostRepository'])
-                ->addMaker(
-                    new MakerTestGenerate()
-                        ->setCommand('maker:gateway')
-                        ->chooseDomain(0) // CreateDomain
-                        ->setArgs(['name' => 'Post'])
+                ->createFile([
+                        'CreateDomain/Domain/Gateway/PostGatewayInterface.php',
+                    ]
                 )
                 ->addInputs([0, 'Post']) // Create Entity - Entity Name
                 ->setFiles([
@@ -74,7 +68,7 @@ class MakerRepositoryTest extends MakerTestCase
         ];
 
         yield 'ChooseDomainAndCreateRepositoryAndGatewayAndChooseEntity' => [
-            new MakerTestGenerate()
+            MakerTestGenerate::create()
                 ->chooseDomain(0) // CreateDomain
                 ->setArgs(['name' => 'PostAdmin'])
                 ->addInputs([1, 0]) // Choose Entity - Post
@@ -95,7 +89,7 @@ class MakerRepositoryTest extends MakerTestCase
     public static function dataTestContentProvider(): \Generator
     {
         yield 'CheckCreateDomainRepositoryAndEntity' => [
-            new MakerTestContent('CreateDomain')
+            MakerTestContent::create('CreateDomain')
                 ->addContent('Repository', 'UserRepository.php', 'namespace App\\CreateDomain\\Infrastructure\\Adapter\\Repository')
                 ->addContent('Repository', 'UserRepository.php', 'use App\\CreateDomain\\Domain\\Gateway\\UserGatewayInterface;')
                 ->addContent('Repository', 'UserRepository.php', 'use App\\CreateDomain\\Domain\\Model\\Entity\\User;')
@@ -108,7 +102,7 @@ class MakerRepositoryTest extends MakerTestCase
         ];
 
         yield 'CheckChooseDomainAndCreateRepositoryWithExistingGateway' => [
-            new MakerTestContent('CreateDomain')
+            MakerTestContent::create('CreateDomain')
                 ->addContent('Repository', 'PostRepository.php', 'namespace App\\CreateDomain\\Infrastructure\\Adapter\\Repository')
                 ->addContent('Repository', 'PostRepository.php', 'use App\\CreateDomain\\Domain\\Gateway\\PostGatewayInterface;')
                 ->addContent('Repository', 'PostRepository.php', 'use App\\CreateDomain\\Domain\\Model\\Entity\\Post;')
@@ -121,7 +115,7 @@ class MakerRepositoryTest extends MakerTestCase
         ];
 
         yield 'CheckChooseDomainAndCreateRepositoryAndGatewayAndChooseEntity' => [
-            new MakerTestContent('CreateDomain')
+            MakerTestContent::create('CreateDomain')
                 ->addContent('Repository', 'PostAdminRepository.php', 'namespace App\\CreateDomain\\Infrastructure\\Adapter\\Repository')
                 ->addContent('Repository', 'PostAdminRepository.php', 'use App\\CreateDomain\\Domain\\Gateway\\PostAdminGatewayInterface;')
                 ->addContent('Repository', 'PostAdminRepository.php', 'use App\\CreateDomain\\Domain\\Model\\Entity\\Post;')
@@ -148,7 +142,7 @@ class MakerRepositoryTest extends MakerTestCase
     public static function dataTestFailedProvider(): \Generator
     {
         yield 'CreateRepositoryWithExistingFileThrowingException' => [
-            new MakerTestFailed()
+            MakerTestFailed::create()
                 ->chooseDomain(0) // CreateDomain
                 ->setArgs(['name' => 'User'])
                 ->addInputs([1, 1]) // Choose Entity - User
@@ -156,7 +150,7 @@ class MakerRepositoryTest extends MakerTestCase
         ];
 
         yield 'CreateRepositoryAndChooseEntityInEmptyFolder' => [
-            new MakerTestFailed()
+            MakerTestFailed::create()
                 ->createDomain('EmptyDomain')
                 ->setArgs(['name' => 'Empty'])
                 ->addInput(1)
