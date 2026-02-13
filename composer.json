@@ -1,31 +1,29 @@
 {
-  "name": "gibass/use-case-maker",
-  "description": "Generating classes for clean architecture Project in symfony",
-  "type": "symfony-bundle",
-  "minimum-stability": "stable",
-  "license": "MIT",
-  "require": {
-    "php": ">=8.1",
-    "symfony/maker-bundle": "^1.52"
-  },
-  "autoload": {
-    "psr-4": {
-      "Gibass\\UseCaseMakerBundle\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Gibass\\UseCaseMakerBundle\\": "tests/"
-    }
-  },
-  "authors": [
-    {
-      "name": "Gibass",
-      "email": "rnmg.gino@gmail.com"
-    }
-  ],
-  "require-dev": {
-    "symfony/phpunit-bridge": "^7.0",
-    "phpunit/phpunit": "^10.5"
-  }
+    "name": "gibass/domain-maker-bundle",
+    "description": "Generating classes for clean architecture Project in symfony",
+    "version": "1.0.0",
+    "type": "symfony-bundle",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.2",
+        "symfony/maker-bundle": "^1.61",
+        "gibass/domain-core": "^0.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gibass\\DomainMakerBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Gibass\\DomainMakerBundle\\Test\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Gibass",
+            "email": "rnmg.gino@gmail.com"
+        }
+    ]
 }

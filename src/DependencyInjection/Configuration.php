@@ -1,15 +1,16 @@
 <?php
 
-namespace Gibass\UseCaseMakerBundle\DependencyInjection;
+namespace Gibass\DomainMakerBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
+
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder('use_case_maker');
+        $treeBuilder = new TreeBuilder('domain_maker');
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
@@ -21,15 +22,8 @@ class Configuration implements ConfigurationInterface
                         ->arrayNode('dir')
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->scalarNode('domain')->defaultValue('%kernel.project_dir%/src/Domain')->end()
-                                ->scalarNode('test')->defaultValue('%kernel.project_dir%/tests/Unit')->end()
-                            ->end()
-                        ->end()
-                        ->arrayNode('namespace_prefix')
-                            ->addDefaultsIfNotSet()
-                            ->children()
-                                ->scalarNode('domain')->defaultValue('App\Domain')->end()
-                                ->scalarNode('test')->defaultValue('App\Tests\Unit')->end()
+                                ->scalarNode('src')->defaultValue('%kernel.project_dir%/src/')->end()
+                                ->scalarNode('config')->defaultValue('%kernel.project_dir%/config/')->end()
                             ->end()
                         ->end()
                     ->end()
