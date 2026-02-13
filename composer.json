@@ -1,12 +1,13 @@
 {
-    "name": "gibass/domain-maker",
+    "name": "gibass/domain-maker-bundle",
     "description": "Generating classes for clean architecture Project in symfony",
     "type": "symfony-bundle",
     "minimum-stability": "stable",
     "license": "MIT",
     "require": {
         "php": ">=8.2",
-        "symfony/maker-bundle": "^1.61"
+        "symfony/maker-bundle": "^1.61",
+        "gibass/domain-core": "^0.1"
     },
     "autoload": {
         "psr-4": {

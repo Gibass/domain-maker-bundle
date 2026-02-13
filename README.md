@@ -14,16 +14,16 @@ The bundle generates classes and places them under your configured `src` directo
 
 - PHP `>=8.2`
 - `symfony/maker-bundle` `^1.61`
+- `gibass/domain-core` `^0.1`
 
 ## Folder Structure
-For example, we need to create a Blog domain, with this bundle we can generate a folder structure and files
-like this :
-```scala
+For example, we need to create a Blog domain; this bundle can generate a folder structure like:
+```text
 |-- src // source folder
-|   `-- Blog // A Specific domain
+|   `-- Blog // A specific domain
 |       |-- Domain
 |       |   |-- Gateway
-|       |   |   |-- PostGateway.php
+|       |   |   |-- PostGatewayInterface.php
 |       |   |-- Model
 |       |   |   |-- Entity
 |       |   |   |   |-- Post.php
@@ -38,7 +38,9 @@ like this :
 |       |   |   |-- PostController.php
 |       |   |-- Presenter
 |       |   |   |-- Html
-|       |   |   |   |-- PostPresenter.php
+|       |   |   |   |-- PostPresenterHTML.php
+|       |   |   |-- Json
+|       |   |   |   |-- PostPresenterJSON.php
 ```
 
 ## Installation
