@@ -24,7 +24,6 @@ class Configuration implements ConfigurationInterface
                             ->children()
                                 ->scalarNode('src')->defaultValue('%kernel.project_dir%/src/')->end()
                                 ->scalarNode('config')->defaultValue('%kernel.project_dir%/config/')->end()
-                                ->scalarNode('test')->defaultValue('%kernel.project_dir%/tests/')->end()
                             ->end()
                         ->end()
                     ->end()
