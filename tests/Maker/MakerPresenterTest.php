@@ -71,7 +71,7 @@ class MakerPresenterTest extends MakerTestCase
         yield 'CheckCreatedHtmlPresenterContentWithCreatedDomain' => [
             MakerTestContent::create('CreateDomain')
                 ->addContent('Presenter', 'Html/TestUseCasePresenterHTML.php', 'namespace App\\CreateDomain\\UserInterface\\Presenter\\Html')
-                ->addContent('Presenter', 'Html/TestUseCasePresenterHTML.php', 'use Gibass\\Domain\Core\\UserInterface\\Presenter\\AbstractWebPresenter;')
+                ->addContent('Presenter', 'Html/TestUseCasePresenterHTML.php', 'use Gibass\\DomainCore\\Core\\UserInterface\\Presenter\\AbstractWebPresenter;')
                 ->addContent('Presenter', 'Html/TestUseCasePresenterHTML.php', 'use Symfony\\Component\\HttpFoundation\\Response;')
                 ->addContent('Presenter', 'Html/TestUseCasePresenterHTML.php', 'class TestUseCasePresenterHTML extends AbstractWebPresenter')
                 ->addContent('Presenter', 'Html/TestUseCasePresenterHTML.php', 'public function present(): Response')
@@ -81,7 +81,7 @@ class MakerPresenterTest extends MakerTestCase
         yield 'CheckCreatedJsonPresenterContentWithChosenDomain' => [
             MakerTestContent::create('CreateDomain')
                 ->addContent('Presenter', 'Json/NewUseCasePresenterJSON.php', 'namespace App\\CreateDomain\\UserInterface\\Presenter\\Json')
-                ->addContent('Presenter', 'Json/NewUseCasePresenterJSON.php', 'use Gibass\\Domain\Core\\UserInterface\\Presenter\\AbstractJsonPresenter;')
+                ->addContent('Presenter', 'Json/NewUseCasePresenterJSON.php', 'use Gibass\\DomainCore\\Core\\UserInterface\\Presenter\\AbstractJsonPresenter;')
                 ->addContent('Presenter', 'Json/NewUseCasePresenterJSON.php', 'use Symfony\\Component\\HttpFoundation\\JsonResponse;')
                 ->addContent('Presenter', 'Json/NewUseCasePresenterJSON.php', 'class NewUseCasePresenterJSON extends AbstractJsonPresenter')
                 ->addContent('Presenter', 'Json/NewUseCasePresenterJSON.php', 'public function present(): JsonResponse')

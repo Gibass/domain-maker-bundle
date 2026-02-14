@@ -1,7 +1,7 @@
 {
     "name": "gibass/domain-maker-bundle",
     "description": "Generating classes for clean architecture Project in symfony",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "type": "symfony-bundle",
     "minimum-stability": "stable",
     "license": "MIT",

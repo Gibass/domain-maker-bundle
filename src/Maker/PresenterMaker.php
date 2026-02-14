@@ -2,8 +2,8 @@
 
 namespace Gibass\DomainMakerBundle\Maker;
 
-use Gibass\Domain\Core\UserInterface\Presenter\AbstractJsonPresenter;
-use Gibass\Domain\Core\UserInterface\Presenter\AbstractWebPresenter;
+use Gibass\DomainCore\Core\UserInterface\Presenter\AbstractJsonPresenter;
+use Gibass\DomainCore\Core\UserInterface\Presenter\AbstractWebPresenter;
 use Gibass\DomainMakerBundle\Builder\ChoosableBuilder;
 use Gibass\DomainMakerBundle\Contracts\ChoosableMakerInterface;
 use Gibass\DomainMakerBundle\Generator\ClassDetails;
